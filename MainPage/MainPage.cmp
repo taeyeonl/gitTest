@@ -1,0 +1,84 @@
+<aura:component controller="MainPage" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute type="Knowledge__kav[]" name="dataList" />
+    <aura:attribute name="rightPanelContent" type="String" default="content" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="pathName" type="String" />
+    <aura:attribute name="searchKeyWord" type="String" />
+    <p>Current URL: {!v.pathName}</p>
+    <p>Current URL: {!v.searchKeyWord}</p>
+    <!-- <div class="comm-header"></div> -->
+    <!-- 左侧按钮列 -->
+    <div class="slds-grid">
+        <div class="slds-col left-div slds-size_2-of-12 rightdiv">
+            <div>
+                <h1 class="slds-p-vertical_medium">検索結果</h1>
+            </div>
+            <ul>
+                <li aura:id="myListItem1" class="forceSearchScopesList" onmousedown="{!c.handleMouseDown}" onmouseup="{!c.handleMouseUp}" onclick="{!c.handleButtonClick}" data-link-value="button1">
+                    <a aura:id="link1" title="すべて選択" class="scopesItem">
+                        <span class="">
+                            <span class="">すべて選択</span>
+                            <span class=""></span>
+                        </span>
+                    </a>
+                </li>
+                <li aura:id="myListItem2" class="forceSearchScopesList" onmousedown="{!c.handleMouseDown}" onmouseup="{!c.handleMouseUp}" onclick="{!c.handleButtonClick}" data-link-value="button2">
+                    <a aura:id="link2" title="ディスカッション" class="scopesItem">
+                        <span class="slds-grid_align-spread">
+                            <span class="slds-truncate">ディスカッション</span>
+                            <lightning:helptext class="helptext" content="フィードからの結果を表示するには、「ディスカッション」を選択します。" />
+                        </span>
+                    </a>
+                </li>
+                <li aura:id="myListItem3" class="forceSearchScopesList" onmousedown="{!c.handleMouseDown}" onmouseup="{!c.handleMouseUp}" onclick="{!c.handleButtonClick}" data-link-value="button3">
+                    <a aura:id="link3" title="ケース" class="scopesItem">
+                        <span class="">
+                            <span class="">ケース</span>
+                            <span class=""></span>
+                        </span>
+                    </a>
+                </li>
+                <li aura:id="myListItem4" class="forceSearchScopesList" onmousedown="{!c.handleMouseDown}" onmouseup="{!c.handleMouseUp}" onclick="{!c.handleButtonClick}" data-link-value="button4">
+                    <a aura:id="link4" title="グループ" class="scopesItem">
+                        <span class="">
+                            <span class="">グループ</span>
+                            <span class=""></span>
+                        </span>
+                    </a>
+                </li>
+                <li aura:id="myListItem5" class="forceSearchScopesList2 expand" onmousedown="{!c.handleMouseDown}" onmouseup="{!c.handleMouseUp}" onclick="{!c.handleExpand}" data-link-value="button5">
+                    <a aura:id="link5" title="リストを折りたたむ" class="scopesItem">
+                        <span class="">
+                            <span class="">リストを折りたたむ</span>
+                            <span class=""></span>
+                        </span>
+                    </a>
+                </li>
+                <li aura:id="myListItem6" class="forceSearchScopesList2 flod" onmousedown="{!c.handleMouseDown}" onmouseup="{!c.handleMouseUp}" onclick="{!c.handleFold}" data-link-value="button6">
+                    <a aura:id="link6" title="リストを展開" class="scopesItem">
+                        <span class="">
+                            <span class="">リストを展開</span>
+                            <span class=""></span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+            <!-- 添加更多按钮以供选择 -->
+        </div>
+        <!-- 右侧画面 -->
+        <div class="slds-col slds-size_8-of-12">
+            {!v.rightPanelContent}
+            <p>Data List:</p>
+            <ul class="result">
+                <aura:iteration items="{!v.dataList}" var="item">
+                    <li>
+                        <a  onclick="{!c.navigateToRecord}" data-recordid="{!item.Id}">タイトル:--> {!item.Title}</a><br/>
+                        {!item.ArticleNumber}·最終更新 {!item.LastModifiedDate}
+                    </li>
+                </aura:iteration>
+            </ul>
+        </div>
+        
+    </div>
+</aura:component>

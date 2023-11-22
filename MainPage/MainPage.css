@@ -1,0 +1,113 @@
+.THIS {
+  font-size: var(--lwc-fontSize3,0.8125rem);
+  margin-top: 24px;
+}
+.THIS .slds-grid {
+    padding-top: var(--lwc-layoutVerticalPadding,0.75rem);
+    padding-bottom: var(--lwc-layoutVerticalPadding,0.75rem);
+}
+.THIS .rightdiv {
+    border-right: var(--lwc-borderWidthThin,1px) solid var(--slds-g-color-border-base-1, var(--lwc-colorBorder,#D4D4D4));
+}
+/* .THIS .comm-header {
+    margin-top: 24px;
+} */
+.THIS .slds-truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/* .THIS .slds-grid_align-spread {
+    justify-content: space-between;
+} */
+.THIS .helptext {
+    margin-right: var(--lwc-spacingXxSmall,0.25rem);
+    margin-top: calc(var(--lwc-spacingXxSmall,0.25rem) * -1);
+}
+.THIS .slds-p-vertical_medium {
+    padding-top: var(--lwc-spacingMedium,1rem);
+    padding-bottom: var(--lwc-spacingMedium,1rem);
+}
+.THIS h1 {
+    padding: var(--lwc-spacingXSmall,0.5rem) var(--lwc-spacingMedium,1rem);
+    padding-left: var(--lwc-spacingLarge,1.5rem);
+    font-size: var(--lwc-fontSize5,1rem);
+    font-weight: var(--lwc-fontWeightBold,700)
+}
+.THIS .forceSearchScopesList {
+  padding: var(--lwc-spacingXSmall,0.5rem) var(--lwc-spacingMedium,1rem);
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+.THIS .forceSearchScopesList .scopesItem {
+    padding-right: var(--lwc-spacingSmall,0.75rem);
+    word-wrap: break-word;
+}
+.THIS .forceSearchScopesList2 {
+  padding: var(--lwc-spacingXSmall,0.5rem) var(--lwc-spacingMedium,1rem);
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+.THIS .forceSearchScopesList2 .scopesItem {
+    padding-right: var(--lwc-spacingSmall,0.75rem);
+    word-wrap: break-word;
+}
+.THIS .forceSearchScopesList a {
+    color: inherit;
+    text-decoration: none;
+    padding: var(--lwc-spacingXSmall,0.5rem);
+}
+.THIS .forceSearchScopesList2 a {
+    /* text-decoration: none; */
+    padding-left: 1rem;
+}
+.THIS .forceSearchScopesList:hover {
+    background-color: rgb(207, 233, 254);
+    box-shadow: inset 2px 0 0 var(--lwc-brandPrimary,#2574A9);
+    cursor: pointer;
+}
+.THIS .forceSearchScopesList2:hover {
+  box-shadow: inset 2px 0 0 var(--lwc-brandPrimary,#2574A9);
+  color: #2574A9;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.THIS .liMouseDwonActive {
+    text-decoration: underline;
+    box-sizing: border-box;
+    box-shadow: 0 0 0 1px #2574A9;
+}
+.THIS .liButtonMouseDwonActive {
+    /* box-sizing: border-box; */
+    border: 1px solid #2574A9;
+}
+.THIS .liMouseUpActive {
+    font-weight: bold;
+    background-color: rgb(207, 233, 254);
+    box-shadow: inset 4px 0 0 var(--lwc-brandPrimary,#2574A9);
+}
+.THIS .liButtonMouseUpActive {
+    font-weight: bold;
+    background-color: rgb(207, 233, 254);
+    box-shadow: inset 4px 0 0 var(--lwc-brandPrimary,#2574A9);
+}
+.THIS .flod {
+    display: none;
+}
+.THIS .hiddenItem {
+    display: none;
+}
+.THIS .blockItem {
+    display: block;
+}
+
+/* right */
+
+
+.THIS .result li {
+    border-bottom: 1px solid #D4D4D4;
+}
+.THIS .result a {
+    border-bottom: 1px dotted;
+}
