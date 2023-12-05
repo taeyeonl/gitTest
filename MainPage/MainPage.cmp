@@ -4,13 +4,29 @@
     <aura:attribute name="rightPanelContent" type="String" default="content" />
     <aura:handler name="init" value="{!this}" action="{!c.init}" />
     <aura:attribute name="pathName" type="String" />
+    <aura:attribute name="resultsNumber" type="String" />
+    <aura:attribute name="showAllItems" type="String" />
+    <aura:attribute name="isBlock" type="String" default="true"/>
     <aura:attribute name="searchKeyWord" type="String" />
-    <p>Current URL: {!v.pathName}</p>
-    <p>Current URL: {!v.searchKeyWord}</p>
+
+    <!-- ケース画面Start -->
+    <aura:attribute name="data" type="List" default="[
+        {'Name': 'John', 'Age': 25, 'City': 'New YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew York', 'Question__c': '回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111', 'Content': 'メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１'},
+        {'Name': 'Alice', 'Age': 30, 'City': 'San Francisco', 'Question__c': '回答内容2222222222', 'Content': 'メモ２２２２２２'},
+        {'Name': 'Bob', 'Age': 22, 'City': 'Los Angeles', 'Question__c': '回答内容333333', 'Content': 'メモ３３３３３３'}
+    ]"/>
+
+    <aura:attribute name="sortField" type="String" />
+    <aura:attribute name="sortOrder" type="String" />
+    <aura:attribute name="showDiv" type="Boolean" default="false" />
+    <aura:attribute name="showIcon" type="Boolean" default="false" />
+    <aura:attribute name="sortButton" type="String" default="関連" />
+    <aura:attribute name="KanRen" type="String" default="関連" />
+    <!-- ケース画面End -->
     <!-- <div class="comm-header"></div> -->
     <!-- 左侧按钮列 -->
     <div class="slds-grid">
-        <div class="slds-col left-div slds-size_2-of-12 rightdiv">
+        <div class="slds-col left-div slds-size_2-of-12 leftdiv">
             <div>
                 <h1 class="slds-p-vertical_medium">検索結果</h1>
             </div>
@@ -67,18 +83,227 @@
             <!-- 添加更多按钮以供选择 -->
         </div>
         <!-- 右侧画面 -->
-        <div class="slds-col slds-size_8-of-12">
+        <div class="slds-col slds-size_8-of-12 rightdiv">
             {!v.rightPanelContent}
-            <p>Data List:</p>
-            <ul class="result">
-                <aura:iteration items="{!v.dataList}" var="item">
-                    <li>
-                        <a  onclick="{!c.navigateToRecord}" data-recordid="{!item.Id}">タイトル:--> {!item.Title}</a><br/>
-                        {!item.ArticleNumber}·最終更新 {!item.LastModifiedDate}
-                    </li>
+            <div class="slds-knowledge">
+                <div class="slds-col slds-wrap slds-text-body--small slds-text-color--weak">
+                    <h2 class="slds-m-bottom--xx-small"><a href="#" title="" class="slds-page-header__title">ナレッジ</a></h2>
+                    <div><p>5件を超える結果</p></div>
+                </div>
+                <aura:if isTrue="{!and(v.resultsNumber,v.isBlock)}">
+                    <div class="rightContent slds-col slds-no-flex">
+                        <lightning:button variant="base" label="さらに表示" title="Base action" onclick="{! c.showAllItems }"/>
+                    </div>
+                </aura:if>
+            </div>
+            <ul>
+                <aura:iteration items="{!v.dataList}" var="item" indexVar="index">
+                    <aura:if isTrue="{!or(v.showAllItems,lessThan(index, 5))}">
+                        <li class="slds-item">
+                            <div>
+                                <p class="slds-truncate"><a onclick="{!c.navigateToRecord}" data-recordid="{!item.Id}">{!index}タイトル: {!item.Title}</a></p>
+                                <ul class="result">
+                                        <li>
+                                            <span class="articleNumber">{!item.ArticleNumber}</span>
+                                        </li>
+                                        <li>
+                                            <span class="validationStatus">最終更新&nbsp;&nbsp;{!item.LastModifiedDate}</span>
+                                        </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </aura:if>
                 </aura:iteration>
             </ul>
+            <div>
+                <div class="targetDiv" aura:id="targetDiv">
+                    <div class="slds-col slds-wrap slds-text-body--small slds-text-color--weak">
+                        <h2 class="slds-m-bottom--xx-small"><a class="slds-page-header__title">ケース</a></h2>
+                        8 件の結果 • 並び替え基準 
+                        <div class="sort-head">
+                        <button class="button2" onclick="{!c.toggleDiv}">
+                            {!v.sortButton}
+                            <lightning:icon iconName="utility:down" size="xx-small" style="margin-left: var(--lwc-spacingXxSmall,0.25rem);"/>
+                            <aura:if isTrue="{!v.showDiv}">
+                            <!-- <div class="dropdown_left" onclick="{!c.hideDiv}">
+                                <ul>
+                                    <div class="search-results-grid-header__sort__header">並び替え</div>
+                                    <li><a><span onclick="{!c.sortData}" data-field="Name-Flg">
+                                        関連
+                                    </span></a></li>
+                                    <li><a><span onclick="{!c.sortData}" data-field="Name-Flg">
+                                        ケース番号
+                                    </span></a></li>
+                                    <li><a><span onclick="{!c.sortData}" data-field="Age-Flg">
+                                        オープン日時
+                                    </span></a></li>
+                                    <li><a><span onclick="{!c.sortData}" data-field="City-Flg">
+                                        件名
+                                    </span></a></li>
+                                </ul>
+                            </div> -->
+                            <div class="slds-dropdown slds-dropdown_left dropdown_left">
+                                <ul role="menu" class="dropdown__list slds-dropdown__list slds-dropdown_length-with-icon-10">
+                                    <div class="grid-sort-header">並び替え</div>
+                                    <li class="slds-dropd own__item slds-is-selected sortMenuItem search-results-grid-header__sort__item" onclick="{!c.sortData}" data-field="KanRen-Flg">
+                                        <a>
+                                            <span class="slds-truncate">
+                                                <aura:if isTrue="{!v.KanRen == '関連'}">
+                                                    <lightning:icon iconName="utility:check" size="x-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon size="x-small" variant="bare">
+                                                        </lightning:icon>
+                                                    </aura:set>
+                                                </aura:if>
+                                                関連
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="slds-dropdown__item slds-is-selected sortMenuItem search-results-grid-header__sort__item" onclick="{!c.sortData}" data-field="Name-Flg">
+                                        <a>
+                                            <span class="slds-truncate">
+                                                <aura:if isTrue="{!v.sortButton == 'ケース番号'}">
+                                                    <lightning:icon iconName="utility:check" size="x-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon size="x-small" variant="bare">
+                                                        </lightning:icon>
+                                                    </aura:set>
+                                                </aura:if>
+                                                ケース番号
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="slds-dropdown__item slds-is-selected sortMenuItem search-results-grid-header__sort__item" onclick="{!c.sortData}" data-field="Age-Flg">
+                                        <a>
+                                            <span class="slds-truncate">
+                                                <aura:if isTrue="{!v.sortButton == 'オープン日時'}">
+                                                    <lightning:icon iconName="utility:check" size="x-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon size="x-small" variant="bare">
+                                                        </lightning:icon>
+                                                    </aura:set>
+                                                </aura:if>
+                                                オープン日時
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="slds-dropdown__item slds-is-selected sortMenuItem search-results-grid-header__sort__item" onclick="{!c.sortData}" data-field="City-Flg">
+                                        <a>
+                                            <span class="slds-truncate">
+                                                <aura:if isTrue="{!v.sortButton == '件名'}">
+                                                    <lightning:icon iconName="utility:check" size="x-small" />
+                                                    <aura:set attribute="else">
+                                                        <lightning:icon size="x-small" variant="bare">
+                                                        </lightning:icon>
+                                                    </aura:set>
+                                                </aura:if>
+                                                件名
+                                            </span> 
+                                        </a>
+                                    </li>
+                                </ul></div>
+                        </aura:if>
+                        </button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="case">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a>
+                                    <span 
+                                        onclick="{!c.sortData}" 
+                                        onmouseover="{!c.showIcon}" 
+                                        onmouseout="{!c.hideIcon}" 
+                                        data-field="Name" 
+                                        class="{!v.sortField=='Name' ? 'active' : ''}"
+                                    >ケース番号
+                                        <aura:if isTrue="{!and(v.sortField=='Name', v.sortOrder=='asc',v.showIcon)}">
+                                            <!-- 显示上箭头图标 -->
+                                            <lightning:icon iconName="utility:arrowup" size="x-small" />
+                                        </aura:if>
+                                        <aura:if isTrue="{!and(v.sortField=='Name', v.sortOrder=='desc',v.showIcon)}">
+                                            <!-- 显示下箭头图标 -->
+                                            <lightning:icon iconName="utility:arrowdown" size="x-small" />
+                                        </aura:if>
+                                    </span>
+                                </a>
+                                
+                            </th>
+                            <th>
+                                <a>
+                                    <span 
+                                        onclick="{!c.sortData}" 
+                                        onmouseover="{!c.showIcon}" 
+                                        onmouseout="{!c.hideIcon}" 
+                                        data-field="Age" 
+                                        class="{!v.sortField=='Age' ? 'active' : ''}"
+                                    >オープン日時
+                                        <aura:if isTrue="{!and(v.sortField=='Age', v.sortOrder=='asc',v.showIcon)}">
+                                            <!-- 显示上箭头图标 -->
+                                            <lightning:icon iconName="utility:arrowup" size="x-small" />
+                                        </aura:if>
+                                        <aura:if isTrue="{!and(v.sortField=='Age', v.sortOrder=='desc',v.showIcon)}">
+                                            <!-- 显示下箭头图标 -->
+                                            <lightning:icon iconName="utility:arrowdown" size="x-small" />
+                                        </aura:if>
+                                    </span>
+                                </a>
+                            </th>
+                            <th>
+                                <a>
+                                    <span 
+                                        onclick="{!c.sortData}" 
+                                        onmouseover="{!c.showIcon}" 
+                                        onmouseout="{!c.hideIcon}" 
+                                        data-field="City" 
+                                        class="{!v.sortField=='City' ? 'active' : ''}"
+                                    >件名
+                                        <aura:if isTrue="{!and(v.sortField=='City', v.sortOrder=='asc',v.showIcon)}">
+                                            <!-- 显示上箭头图标 -->
+                                            <lightning:icon iconName="utility:arrowup" size="x-small" />
+                                        </aura:if>
+                                        <aura:if isTrue="{!and(v.sortField=='City', v.sortOrder=='desc',v.showIcon)}">
+                                            <!-- 显示下箭头图标 -->
+                                            <lightning:icon iconName="utility:arrowdown" size="x-small" />
+                                        </aura:if>
+                                    </span>
+                                </a>
+                            </th>
+                            <th>
+                                <a>
+                                    <span
+                                    >回答内容{!v.sortField} Question__c {!v.sortOrder}回答内容{!v.showIcon}
+                                    </span>
+                                </a>
+                            </th>
+                            <th>
+                                <a>
+                                    <span>内部向けメモ
+                                    </span>
+                                </a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.data}" var="row">
+                            <tr>
+                                <td>{!row.Name}</td>
+                                <td>{!row.Age}</td>
+                                <td>{!row.City}</td>
+                                <td><span>{!row.Question__c}</span></td>
+                                <td><span>{!row.Content}</span></td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
         </div>
+        <!-- ケース画面 -->
         
     </div>
 </aura:component>

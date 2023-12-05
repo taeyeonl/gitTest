@@ -9,26 +9,7 @@
             var state = response.getState();
             if (state === "SUCCESS") {
               var storeResponse = response.getReturnValue();
-            //   // if storeResponse size is 0 ,display no record found message on screen.
-            //   if (storeResponse.length == 0) {
-            //     component.set("v.Message", true);
-            //   } else {
-            //     component.set("v.Message", false);
-            //   }
-            //   // set numberOfRecord attribute value with length of return value from server
-            //   component.set("v.TotalNumberOfRecord", storeResponse.length);
-            //   storeResponse.forEach(function (record) {
-            //     record.linkName = "/" + record.Id;
-            //   });
-             
               component.set("v.ankenList", storeResponse);
-       
-            //   component.set("v.loadMoreStatus", "Completed");
-            //   window.setTimeout(
-            //     function() {
-            //       event.getSource().set("v.isLoading", false);
-            //     },1600
-            //     );
       
             } else if (state === "INCOMPLETE") {
               alert("Response is Incompleted");
@@ -60,17 +41,76 @@
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {
-                // 将返回的数据设置到组件属性中
-                console.log('SUCCESS ->>>>>>'+response.getReturnValue());
-                  var domElement = component.find("myListItem1").getElement();
-                  $A.util.addClass(domElement, 'liMouseUpActive');
-                component.set("v.dataList", response.getReturnValue());
+              // 给左侧列表すべて 样式
+              var domElement = component.find("myListItem1").getElement();
+              $A.util.addClass(domElement, 'liMouseUpActive');
+              var records = response.getReturnValue();
+              if(records !== null){
+                this.modifyObject(records);
+                if(records.length > 5){
+                    component.set("v.resultsNumber", records.length);
+                }
+              }
+              component.set("v.dataList", response.getReturnValue());
             } else if (state === "ERROR") {
                 // 处理错误
                 console.error(response.getError());
             }
         });
         $A.enqueueAction(action);
-    }
+    },
+    // 時間を日付に変換する
+    // modifyObject: function(inputObject) {
+    //     if (typeof inputObject === 'object' && inputObject !== null) {
+    //       for (var i = 0; i < inputObject.length; i++) {
+    //         const isoDateString  = new Date(inputObject[i].LastModifiedDate).toISOString();
+    //         const dateObject = new Date(isoDateString );
+    //         const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+    //         inputObject[i].LastModifiedDate = dateObject.toLocaleDateString(undefined, options);
+    //       }
+    //       return inputObject;
+    //     } else {
+    //       throw new Error('Input must be an object');
+    //     }
+    // }
+    modifyObject: function(inputObject) {
+      if (typeof inputObject === 'object' && inputObject !== null) {
+          for (var i = 0; i < inputObject.length; i++) {
+              if (inputObject[i].LastModifiedDate) {
+                  const dateObject = new Date(inputObject[i].LastModifiedDate);
+  
+                  // 获取年、月、日、小时、分钟
+                  const year = dateObject.getFullYear();
+                  const month = ('0' + (dateObject.getMonth() + 1)).slice(-2); // 注意月份从0开始
+                  const day = ('0' + dateObject.getDate()).slice(-2);
+                  const hours = ('0' + dateObject.getHours()).slice(-2);
+                  const minutes = ('0' + dateObject.getMinutes()).slice(-2);
+  
+                  // 构建年月日时分字符串
+                  const formattedDate = `${year}年${month}月${day}日 ${hours}:${minutes}`;
+  
+                  // 更新属性值
+                  inputObject[i].LastModifiedDate = formattedDate;
+              }
+          }
+          return inputObject;
+      } else {
+          throw new Error('Input must be an array');
+      }
+  },
+  sortBy: function(field, order) {
+    var isAsc = order === 'asc';
+    return function(a, b) {
+        var valueA = a[field];
+        var valueB = b[field];
 
+        if (isAsc) {
+            return valueA < valueB ? -1 : 1;
+        } else {
+            return valueA > valueB ? -1 : 1;
+        }
+    };
+  },
+  
+  
 })

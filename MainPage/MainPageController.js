@@ -12,6 +12,18 @@
         component.set("v.pathName", pathArray[0]);
         component.set("v.searchKeyWord", lastSegment);
         helper.doInitHelper(component, event);
+        // 注册全局监听事件
+        document.addEventListener('click', $A.getCallback(function(event) {
+            // 点击div内部
+            var clickedElement = event.target;
+            console.log("点击div内部");
+            var targetDiv = component.find('targetDiv').getElement();
+            if (!targetDiv.contains(clickedElement)) {
+                // 点击外部
+                component.set("v.showDiv", false);
+                console.log("点击外部");
+            }
+        }));
     },
     // 在鼠标按下时处理逻辑  
     handleMouseDown: function(component, event, helper) {
@@ -195,5 +207,77 @@
         // 导航到记录页面
         var navService = component.find("navService");
         navService.navigate(pageReference);
-    }
+    },
+    showAllItems: function(component, event, helper) {
+        component.set("v.showAllItems", true);
+        component.set("v.isBlock", false);
+    },
+
+    // ケースStart
+    sortData: function(component, event, helper) {
+        var fieldName = event.currentTarget.dataset.field;
+        fieldName = fieldName.split('-');
+        
+        
+        if( fieldName[1] ){
+            var currentOrder ="asc";
+        } else {
+            var currentOrder = component.get("v.sortOrder") === "asc" ? "desc" : "asc";
+        }
+        fieldName = fieldName[0];
+
+        if(fieldName =="KanRen") {
+            fieldName = "Name";
+            component.set("v.KanRen", "関連");
+            component.set("v.sortButton", "関連");
+        } else {
+            switch (fieldName) {
+                case "Name":
+                    component.set("v.sortButton", "ケース番号");
+                    break;
+                case "Age":
+                    component.set("v.sortButton", "オープン日時");
+                    break;
+                case "City":
+                    component.set("v.sortButton", "件名");
+                    break;
+                default:
+                    component.set("v.sortButton", "関連");
+              }
+              component.set("v.KanRen", "");
+        }
+
+		if (fieldName === component.get("v.sortField")) {
+            // 如果相同，则切换排序方向
+			component.set("v.sortOrder", currentOrder);
+        } else {
+            // 如果不同，则默认为升序
+            component.set("v.sortOrder", "asc");
+        }
+        
+        // Perform sorting
+        var data = component.get("v.data");
+        data.sort(helper.sortBy(fieldName, currentOrder));
+        // Update component attributes
+        component.set("v.data", data);
+        component.set("v.sortField", fieldName);
+          
+    },
+	showIcon: function(component, event, helper) {
+		
+		console.log("88888888888");
+        component.set("v.showIcon", true);
+    },
+    
+    hideIcon: function(component, event, helper) {
+		console.log("9999999999999999");
+        component.set("v.showIcon", false);
+    },
+	toggleDiv: function(component, event, helper) {
+        component.set("v.showDiv", !component.get("v.showDiv"));
+    },
+	hideDiv: function(component, event, helper) {
+        // Hide the div when clicked outside
+        component.set("v.showDiv", false);
+    },
 })
