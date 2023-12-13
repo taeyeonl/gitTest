@@ -261,3 +261,87 @@
     border-width: var(--slds-c-button-sizing-border, var(--sds-c-button-sizing-border, var(--lwc-borderWidthThin,1px)));
     color: var(--slds-c-button-text-color, var(--sds-c-button-text-color, var(--lwc-brandAccessible,#2574A9)));
 }
+
+/* 絞り込み項目 */
+
+.THIS .highlighted2 {
+    background-color: rgb(250, 255, 189);
+}
+.THIS .applyButton2 {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.THIS .hasApply-button {
+    width: calc(100% - 2.25rem); 
+}
+.THIS .input-width {
+    width: 100%;
+}
+.THIS .input-style {
+    min-height: 1.875rem;
+    border: 1px solid #D4D4D4;
+    border-radius: 0.25rem;
+    transition: border 0.1s linear,background-color 0.1s linear;
+    display: inline-block;
+    padding: 0 1rem 0 0.75rem;
+    line-height: 1.875rem;
+}
+.THIS .input-style:active {
+    outline: 0;
+    border-color: rgb(27, 150, 255);
+    box-shadow: 0 0 3px #0176d3;
+}
+.THIS .input-style:focus  {
+    outline: 0;
+    border-color: rgb(27, 150, 255);
+    box-shadow: 0 0 3px #0176d3;
+}
+.THIS .bangou-left {
+    margin-left: 1.9rem;
+}
+.THIS .open-time-clear-left {
+    margin-left: 1.1rem;
+}
+.THIS .keimei-clear-left {
+    margin-left: 3.5rem;
+}
+/*.THIS .slds-m-bottom_x-small {
+    padding-bottom: 0.5rem;
+}
+.THIS .slds-m-right_x-small {
+    padding-right: 0.5rem;
+} */
+.THIS .bangou-button-display {
+    box-shadow: inset 0 0 0 rgb(255, 255, 255);
+    width: var(--lwc-squareIconMediumBoundary,2rem);
+    height: var(--lwc-squareIconMediumBoundary,2rem);
+    background-color: #2574A9;
+    border-color: #2574A9;
+    color: #FFFFFF;
+}
+.THIS .bangou-button-disabled {
+    box-shadow: inset 0 0 0 rgb(255, 255, 255);
+    width: var(--lwc-squareIconMediumBoundary,2rem);
+    height: var(--lwc-squareIconMediumBoundary,2rem);
+    background: rgb(201, 199, 197);
+    border-color: rgb(201, 199, 197);
+    color: rgb(255, 255, 255);
+}
+/* .THIS .slds-button {
+    display: inline-flex;
+    align-items: center;
+    padding-top: var(--slds-c-button-spacing-block-start, var(--sds-c-button-spacing-block-start, 0));
+    padding-bottom: var(--slds-c-button-spacing-block-end, var(--sds-c-button-spacing-block-end, 0));
+    background: none;
+    background-clip: border-box;
+    border-style: solid;
+    border-width: var(--slds-c-button-sizing-border, var(--sds-c-button-sizing-border, var(--lwc-borderWidthThin,1px)));
+    border-radius: var(--slds-c-button-radius-border, var(--sds-c-button-radius-border, var(--lwc-buttonBorderRadius,.25rem)));
+    box-shadow: var(--slds-c-button-shadow, var(--sds-c-button-shadow));
+    line-height: var(--slds-c-button-line-height, var(--sds-c-button-line-height, var(--lwc-lineHeightButton,1.875rem)));
+    text-decoration: none;
+    -webkit-appearance: none;
+    white-space: normal;
+    user-select: none;
+} */

@@ -89,6 +89,11 @@
         // 获取点击的按钮的值
         var buttonValue = event.currentTarget.dataset.linkValue;
         console.log("当前按钮值->"+buttonValue);
+        if(buttonValue == 'button3'){
+            component.set("v.filterItems", true);
+        } else {
+            component.set("v.filterItems", false);
+        }
         // 根据按钮值调用服务器端方法获取相应的内容
         var action = component.get("c.getButtonContent");
         action.setParams({
@@ -280,4 +285,80 @@
         // Hide the div when clicked outside
         component.set("v.showDiv", false);
     },
+
+    // 絞り込み項目
+    bangouSearch: function(component, event, helper) {
+        component.set("v.bangouClear", true);
+        helper.searchHelper(component, event);
+        helper.buttonStatusHelper(component, event);
+    },
+    openTimeSearch: function(component, event, helper) {
+        if(component.find("InputSelectSingle").get("v.value") != '選択...'){
+            component.set("v.openTimeClear", true);
+            helper.searchHelper(component, event);
+            helper.buttonStatusHelper(component, event);
+        }
+
+    },
+    keimeiSearch: function(component, event, helper) {
+        component.set("v.keimeiClear", true);
+        helper.searchHelper(component, event);
+        helper.buttonStatusHelper(component, event);
+    },
+    unSelect: function(component, event, helper) {
+        component.find("searchBangou").getElement().value = '';
+        component.set("v.bangouClear", false);
+        component.set("v.inputClass", "input-width");
+        component.set("v.bangouSearchBlock", false);
+        component.set("v.bangouSearchDisabled", false);
+        component.set("v.openTimeClear", false);
+        component.find("InputSelectSingle").set("v.value", "選択...");
+        component.find("searchKeimei").getElement().value = '';
+        component.set("v.keimeiClear", false);
+        component.set("v.inputKeimeiClass", "input-width");
+        component.set("v.keimeiSearchBlock", false);
+        component.set("v.keimeiSearchDisabled", false);
+        component.set("v.buttonStatus", false);
+        helper.getAllData(component, event);
+    },
+    bangouClear: function(component, event, helper) {
+        console.log("清除事件");
+        component.find("searchBangou").getElement().value = '';
+        component.set("v.bangouClear", false);
+        component.set("v.inputClass", "input-width");
+        component.set("v.bangouSearchBlock", false);
+        component.set("v.bangouSearchDisabled", false);
+        helper.searchHelper(component, event);
+        helper.buttonStatusHelper(component, event);
+        
+    },
+    openTimeClear: function(component, event, helper) {
+        console.log("清除事件2");
+        component.set("v.openTimeClear", false);
+        component.find("InputSelectSingle").set("v.value", "選択...");
+        helper.searchHelper(component, event);
+        helper.buttonStatusHelper(component, event);
+    },
+    keimeiClear: function(component, event, helper) {
+        console.log("清除事件3");
+        component.find("searchKeimei").getElement().value = '';
+        component.set("v.keimeiClear", false);
+        component.set("v.inputKeimeiClass", "input-width");
+        component.set("v.keimeiSearchBlock", false);
+        component.set("v.keimeiSearchDisabled", false);
+        helper.searchHelper(component, event);
+        helper.buttonStatusHelper(component, event);
+    },
+    handleFocus: function(component, event, helper) {
+        console.log("获得焦点");
+        helper.focusHelper(component, event);
+    },
+    handleBlur: function(component, event, helper) {
+        console.log("失去焦点");        
+        helper.blurHelper(component, event);
+    },
+    handleBangouChange: function(component, event, helper) {
+        helper.focusHelper(component, event);
+    },
+    
 })

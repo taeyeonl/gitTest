@@ -8,12 +8,31 @@
     <aura:attribute name="showAllItems" type="String" />
     <aura:attribute name="isBlock" type="String" default="true"/>
     <aura:attribute name="searchKeyWord" type="String" />
+    <aura:attribute name="inputClass" type="String" default="input-width" />
+    <aura:attribute name="inputKeimeiClass" type="String" default="input-width" />
+    <aura:attribute name="bangouClear" type="boolean" default="false" />
+    <aura:attribute name="openTimeClear" type="boolean" default="false" />
+    <aura:attribute name="keimeiClear" type="boolean" default="false" />
+    <aura:attribute name="bangouSearchDisabled" type="boolean" default="false" />
+    <aura:attribute name="bangouSearchBlock" type="boolean" default="false" />
+    <aura:attribute name="keimeiSearchDisabled" type="boolean" default="false" />
+    <aura:attribute name="keimeiSearchBlock" type="boolean" default="false" />
+    <aura:attribute name="filterItems" type="boolean" default="false" />
+    <aura:attribute name="buttonStatus" type="boolean" default="false" />
 
     <!-- ケース画面Start -->
     <aura:attribute name="data" type="List" default="[
-        {'Name': 'John', 'Age': 25, 'City': 'New YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew York', 'Question__c': '回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111', 'Content': 'メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１'},
-        {'Name': 'Alice', 'Age': 30, 'City': 'San Francisco', 'Question__c': '回答内容2222222222', 'Content': 'メモ２２２２２２'},
-        {'Name': 'Bob', 'Age': 22, 'City': 'Los Angeles', 'Question__c': '回答内容333333', 'Content': 'メモ３３３３３３'}
+        {'Id': '00013', 'Name': 'John', 'Age': '2023/12/01 16:42', 'City': 'New YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew York', 'Question__c': '回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111', 'Content': 'メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１'},
+        {'Id': '00034', 'Name': 'Alice', 'Age': '2023/09/03 16:42', 'City': 'San Francisco', 'Question__c': '回答内容2222222222', 'Content': 'メモ２２２２２２'},
+        {'Id': '00022', 'Name': 'Bob', 'Age': '2023/09/02 16:42', 'City': 'Los Angeles', 'Question__c': '回答内容333333', 'Content': 'メモ３３３３３３'}
+    ]"/>
+    <aura:attribute name="matchedData" type="List" default="[
+        {'Id': '00013', 'Name': 'John', 'Age': '2023/12/2 16:42', 'City': 'New YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew YorkNew York', 'Question__c': '回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111回答内容111111111', 'Content': 'メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１メモ１１１１１１'},
+        {'Id': '00034', 'Name': 'Alice', 'Age': '2023/11/07 16:42', 'City': 'San Francisco', 'Question__c': '回答内容2222222222', 'Content': 'メモ２２２２２２'},
+        {'Id': '00022', 'Name': 'Bob', 'Age': '2023/12/7 16:42', 'City': 'Los Angeles', 'Question__c': '回答内容333333', 'Content': 'メモ３３３３３３'},
+        {'Id': '00023', 'Name': 'Bob-7', 'Age': '2023/11/30 16:42', 'City': 'Los Angeles', 'Question__c': '回答内容333333', 'Content': 'メモ３３３３３３'},
+        {'Id': '00024', 'Name': 'Bob-30', 'Age': '2023/11/30 16:42', 'City': 'Los Angeles', 'Question__c': '回答内容333333', 'Content': 'メモ３３３３３３'},
+        {'Id': '00025', 'Name': 'Bob-365', 'Age': '2022/12/8 16:42', 'City': 'Los Angeles', 'Question__c': '回答内容333333', 'Content': 'メモ３３３３３３'}
     ]"/>
 
     <aura:attribute name="sortField" type="String" />
@@ -43,7 +62,13 @@
                     <a aura:id="link2" title="ディスカッション" class="scopesItem">
                         <span class="slds-grid_align-spread">
                             <span class="slds-truncate">ディスカッション</span>
-                            <lightning:helptext class="helptext" content="フィードからの結果を表示するには、「ディスカッション」を選択します。" />
+                            <lightning:helptext class="helptext" content="フィードからの結果を表示するには、「ディスカッション」を選択します。">
+                                <!-- <div class="slds-form-element__icon">
+                                    <lightning:button variant="bare">
+
+                                    </lightning:button>
+                                </div> -->
+                            </lightning:helptext>
                         </span>
                     </a>
                 </li>
@@ -80,7 +105,83 @@
                     </a>
                 </li>
             </ul>
-            <!-- 添加更多按钮以供选择 -->
+            <aura:if isTrue="{!v.filterItems}">
+            <div class="inputsContainer slds-p-horizontal_medium slds-is-relative forceSearchResultsFilters">
+                <div class="slds-nav-vertical__section">
+                    <h3 class="slds-nav-vertical__title slds-p-left_x-small">絞り込み項目</h3>
+                    <aura:if isTrue="{!v.buttonStatus}">
+                        <button type="button" class="slds-button clearAllButton slds-button--reset slds-text-link slds-text-body_small slds-line-height--reset" onclick="{!c.unSelect}">選択解除</button>
+                    </aura:if>
+                </div>
+                <div class="slds-form-element slds-p-around_x-small forceSearchFilterInput forceSearchFilterInputText">
+                    <div class="uiInput uiInputText uiInput--default uiInput--input">
+                        <label class="slds-truncate slds-form-element__label uiLabel-left form-element__label uiLabel">
+                            <span>ケース番号</span>
+                        </label>
+                        <aura:if isTrue="{!v.bangouClear}">
+                        <lightning:button class="clearButton slds-button--reset slds-text-link slds-form-element__label slds-is-absolute bangou-left" onclick="{!c.bangouClear}"  >
+                            クリア
+                        </lightning:button>
+                        </aura:if>
+                        <input aura:id="searchBangou" class="{!'input-style ' + v.inputClass}" type="text" maxlength="255" value ="" onfocus="{!c.handleFocus}" onblur="{!c.handleBlur}" oninput="{!c.handleBangouChange}" data-input-value="searchBangou" />
+                    </div>
+                    <aura:if isTrue="{!v.bangouSearchDisabled}">
+                    <lightning:button class="slds-button slds-button_icon applyButton2 slds-p-horizontal_x-small slds-m-right_x-small slds-m-bottom_x-small bangou-button-disabled" disabled="true">
+                        <lightning:icon iconName="utility:search" size="x-small" variant="inverse"/>
+                    </lightning:button>
+                    </aura:if>
+                    <aura:if isTrue="{!v.bangouSearchBlock}">
+                    <lightning:button class="slds-button slds-button_icon applyButton2 slds-p-horizontal_x-small slds-m-right_x-small slds-m-bottom_x-small bangou-button-display" onclick="{!c.bangouSearch}">
+                        <lightning:icon iconName="utility:search" size="x-small" variant="inverse"/>
+                    </lightning:button>
+                    </aura:if>
+                    
+                </div>
+                <div class="slds-form-element slds-p-around_x-small forceSearchFilterInput forceSearchFilterInputText">
+                    <div class="uiInput uiInputText uiInput--default uiInput--input">
+                        <label class="slds-truncate slds-form-element__label uiLabel-left form-element__label uiLabel">
+                            <span>オープン日時</span>
+                        </label>
+                        <aura:if isTrue="{!v.openTimeClear}">
+                        <lightning:button class="clearButton slds-button--reset slds-text-link slds-form-element__label slds-is-absolute open-time-clear-left" onclick="{!c.openTimeClear}"  >
+                            クリア
+                        </lightning:button>
+                        </aura:if>
+                        <ui:inputSelect class="single" aura:id="InputSelectSingle" change="{!c.openTimeSearch}">
+                            <ui:inputSelectOption text="選択..." value="true"/>
+                            <ui:inputSelectOption text="今日"/>
+                            <ui:inputSelectOption text="過去 7 日間"/>
+                            <ui:inputSelectOption text="過去 30 日間"/>
+                            <ui:inputSelectOption text="過去 90 日間"/>
+                            <ui:inputSelectOption text="過去 365 日間"/>
+                        </ui:inputSelect>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-p-around_x-small forceSearchFilterInput forceSearchFilterInputText">
+                    <div class="uiInput uiInputText uiInput--default uiInput--input">
+                        <label class="slds-truncate slds-form-element__label uiLabel-left form-element__label uiLabel">
+                            <span>件名&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        </label>
+                        <aura:if isTrue="{!v.keimeiClear}">
+                        <lightning:button class="clearButton slds-button--reset slds-text-link slds-form-element__label slds-is-absolute keimei-clear-left" onclick="{!c.keimeiClear}"  >
+                            クリア
+                        </lightning:button>
+                        </aura:if>
+                        <input aura:id="searchKeimei" class="{!'input-style ' + v.inputKeimeiClass}" type="text" maxlength="255" value ="" onfocus="{!c.handleFocus}" onblur="{!c.handleBlur}" oninput="{!c.handleBangouChange}" data-input-value="searchKeimei"/>
+                    </div>
+                    <aura:if isTrue="{!v.keimeiSearchDisabled}">
+                    <lightning:button class="slds-button slds-button_icon applyButton2 slds-p-horizontal_x-small slds-m-right_x-small slds-m-bottom_x-small bangou-button-disabled" disabled="true">
+                        <lightning:icon iconName="utility:search" size="x-small" variant="inverse"/>
+                    </lightning:button>
+                    </aura:if>
+                    <aura:if isTrue="{!v.keimeiSearchBlock}">
+                    <lightning:button class="slds-button slds-button_icon applyButton2 slds-p-horizontal_x-small slds-m-right_x-small slds-m-bottom_x-small bangou-button-display" onclick="{!c.keimeiSearch}">
+                        <lightning:icon iconName="utility:search" size="x-small" variant="inverse"/>
+                    </lightning:button>
+                    </aura:if>
+                </div>
+            </div>
+            </aura:if>
         </div>
         <!-- 右侧画面 -->
         <div class="slds-col slds-size_8-of-12 rightdiv">
